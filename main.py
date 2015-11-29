@@ -47,35 +47,37 @@ def main():
 
 	# Data 1
 	train_data1, test_data1 = importData(filename1)
-	for i in range(0,train_data1[1]):
+	for i in range(0,len(train_data1[1])):
 		train_labels.append(1)
-	for i in range(0,test_data1[1]):
+	for i in range(0,len(test_data1[1])):
 		test_labels.append(1)
 	train_data1 = train_data1.transpose()
 	test_data1 = test_data1.transpose()
 
+
 	# Data 2
 	train_data2, test_data2 = importData(filename2)
-	for i in range(0,train_data2[1]):
-		train_labels.append(1)
-	for i in range(0,test_data2[1]):
-		test_labels.append(1)
+	for i in range(0,len(train_data2[1])):
+		train_labels.append(2)
+	for i in range(0,len(train_data2[1])):
+		test_labels.append(2)
 	train_data2 = train_data2.transpose()
 	test_data2 = test_data2.transpose()
 
+	train_data= np.vstack((train_data1,train_data2))
+
 	# Data 3
 	train_data3, test_data3 = importData(filename3)
-	for i in range(0,train_data3[1]):
-		train_labels.append(1)
-	for i in range(0,test_data3[1]):
-		test_labels.append(1)
+	for i in range(0,len(train_data3[1])):
+		train_labels.append(3)
+	for i in range(0,len(train_data3[1])):
+		test_labels.append(3)
 	train_data3 = train_data3.transpose()
 	test_data3 = test_data3.transpose()
 
+	train_data= np.vstack((train_data,train_data3))
 
-
-
-
+	clf=TrainSVM(train_data,train_labels)
 
 
 
