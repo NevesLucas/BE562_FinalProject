@@ -14,9 +14,9 @@ def importData(filename):
 	with open(filename) as f:
 		ncols = len(f.readline().split('\t')) #gets number of columnts
 	train_data = np.loadtxt(filename, delimiter="\t",unpack=False,skiprows=1,usecols=range(4,ncols-16)) #skips text containing columns and rows to load only expression data
-	test_data = np.loadtxt(filename, delimiter="\t",unpack=False,skiprows=1,usecols=range(80,ncols)) #skips text containing columns and rows to load only expression data
-	train_data = train_data[:num_rows]
-	test_data = test_data[:num_rows]
+	test_data = np.loadtxt(filename, delimiter="\t",unpack=False,skiprows=1,usecols=range(ncols-16,ncols)) #skips text containing columns and rows to load only expression data
+	#train_data = train_data[:num_rows]
+	#test_data = test_data[:num_rows]
 	return train_data, test_data
 
 
@@ -30,8 +30,7 @@ def importProteinLabels(filename):
 	return labels
 
 def TrainSVM(data,labels):
-	clf = SVC()
-	SVC(probability= True,random_state=22003)
+	clf = SVC(probability= True,decision_function_shape='ovr',random_state=2134,kernel="linear")
 	clf.fit(data,labels)
 	return clf
 
@@ -78,7 +77,9 @@ def main():
 	train_data= np.vstack((train_data,train_data3))
 
 	clf=TrainSVM(train_data,train_labels)
-
-
+#	print(train_labels)
+	print (clf.predict(test_data1))
+	print (clf.predict(test_data2))
+	print (clf.predict(test_data3))
 
 main()
