@@ -1,6 +1,6 @@
 To Do:
 
-Read Test Data
-Sort Test Data
+Read Test Data -complete
+Sort Test Data -pending
 Remove Data that is not common between the test and training data
 Create file output, one file per class, containing classified data
