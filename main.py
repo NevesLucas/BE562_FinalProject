@@ -1,4 +1,4 @@
-__author__ = 'Akshay Ajbani, Emily Misnick, Lucas Neves'
+nb__author__ = 'Akshay Ajbani, Emily Misnick, Lucas Neves'
 
 
 import os
@@ -46,12 +46,29 @@ def TrainSVM(data,labels):
 	clf.fit(data,labels)
 	return clf
 
+def loadTestData(filename):
+	with open(filename,'r') as f:
+		data_iter = csv.reader(f,delimiter='\t')
+		data=[ data for data in data_iter ]
+	out =  np.asarray(data)
+	return out
+def loadTestLabels(filename):
+	labels=[]
+	with open(filename,'r') as f:
+		reader=csv.reader(f)
+	return labels
+
+
+def sortData(testData,test_labels,train_labels):
+	
 
 def main():
-	num_trials = 10
+	num_trials = 1
 	filename1 = "./Data/G1_singlecells_counts.txt"
 	filename2 = "./Data/G2M_singlecells_counts.txt"
 	filename3 = "./Data/S_singlecells_counts.txt"
+	testname = "./Data/sampleData.csv"
+	testlabelname = "./Data/sampleDataLabels.txt"
 	train_labels = []
 	test_labels = []
 	errors = 0
@@ -61,10 +78,14 @@ def main():
 	data2, ncols2 = importData(filename2)
 	data3, ncols3 = importData(filename3)
 
+	test_data=loadTestData(testname)
+	test_data_labels=loadTestLabels(testlabelname)
+
+	
+
 
 
 	for trial in range(0,num_trials):
-		print('Trail: '+ trial)
 		# Data 1
 		train_data1, test_data1 = splitData(data1,ncols1)
 		for i in range(0,len(train_data1[1])):
