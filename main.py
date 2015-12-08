@@ -157,11 +157,12 @@ def main():
 
 
 	for trial in range(0,num_trials):
+		train_labels = []
+		test_labels = []
 		# Data 1
 		train_data1, test_data1 = splitData(data1,ncols1)
 		for i in range(0,len(train_data1[1])):
 			train_labels.append(1)
-		for i in range(0,len(test_data1[1])):
 			test_labels.append(1)
 		train_data1 = train_data1.transpose()
 		test_data1 = test_data1.transpose()
@@ -171,7 +172,6 @@ def main():
 		train_data2, test_data2 = splitData(data2,ncols2)
 		for i in range(0,len(train_data2[1])):
 			train_labels.append(2)
-		for i in range(0,len(train_data2[1])):
 			test_labels.append(2)
 		train_data2 = train_data2.transpose()
 		test_data2 = test_data2.transpose()
@@ -180,10 +180,11 @@ def main():
 
 		# Data 3
 		train_data3, test_data3 = splitData(data3,ncols3)
+		
 		for i in range(0,len(train_data3[1])):
 			train_labels.append(3)
-		for i in range(0,len(train_data3[1])):
 			test_labels.append(3)
+
 		train_data3 = train_data3.transpose()
 		test_data3 = test_data3.transpose()
 
