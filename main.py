@@ -100,7 +100,7 @@ def sortData(data1,data2,data3,protein_labels,test_data_Labels,test_data): #extr
 	print(len(data_out1))
 	return [data_out1,data_out2,data_out3,data_out_labels,out_data]
 
-def saveData(data,test):
+def saveData(data,test,trial):
 	class1=[]
 	class1=np.array(class1)
 	class2=[]
@@ -119,13 +119,13 @@ def saveData(data,test):
 	class2=np.transpose(class2)
 	class3=np.transpose(class3)
 
-	np.savetxt('test_results_trial_class1.csv', class1, delimiter="\t")
-	np.savetxt('test_results_trial_class2.csv', class2, delimiter="\t")
-	np.savetxt('test_results_trial_class3.csv', class3, delimiter="\t")
+	np.savetxt('test_results_trial'+str(trial)+'_class1.csv', class1, delimiter="\t")
+	np.savetxt('test_results_trial'+str(trial)+'_class2.csv', class2, delimiter="\t")
+	np.savetxt('test_results_trial'+str(trial)+'_class3.csv', class3, delimiter="\t")
 
 
 def main():
-	num_trials = 1
+	num_trials = 4
 	runDataTest = True
 	filename1 = "./Data/G1_singlecells_counts.txt"
 	filename2 = "./Data/G2M_singlecells_counts.txt"
@@ -199,7 +199,7 @@ def main():
 			print(str(len(test_data)))
 			test_data=test_data.transpose()
 			predict_data=clf.predict(test_data)
-			saveData(predict_data,test_data)
+			saveData(predict_data,test_data,trial)
 
 		errors += (np.count_nonzero(predict1-1)+np.count_nonzero(predict2-2)+np.count_nonzero(predict3-3))
 
