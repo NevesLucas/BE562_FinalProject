@@ -59,11 +59,50 @@ def loadTestLabels(filename):
 	return labels
 
 
-def sortData(testData,test_labels,train_labels):
-	
+def sortData(data1,data2,data3,protein_labels,test_data_labels):
+
+	data_out1=[]
+	data_out2=[]
+	data_out3=[]
+
+	for i in range(0,len(test_data_Labels)):
+		matchlist = protein_labels.index(test_data_Labels[i])
+		data_out_labels.append(protein_labels[matchlist])
+		data_out1.append(data1[matchlist])
+		data_out2.append(data2[matchlist])
+		data_out3.append(data3[matchlist])
+
+	return data_out1,data_out2,data_out3,data_out_labels
+
+def saveData(data,test):
+	class1=[]
+	class2=[]
+	class3=[]
+	for i in range(0,len(data)):
+		if data[i]==1:
+			class1.append(test[:,i])
+		elif data[i]==2:
+			class2.append(test[:,i])
+		elif data[i]==3:
+			class3.append(test[:,i])
+	class1=np.transpose(class1)
+	class2=np.transpose(class2)
+	class3=np.transpose(class3)
+
+	with open('test_results_class1.csv','w') as f1:
+		writer=csv.writer(f1)
+		writer.writerows(class1)
+	with open('test_results_class2.csv','wb') as f2: 
+		writer=csv.writer(f2)
+		writer.writerows(class2)
+	with open('test_results_class3.csv','wb') as f3:
+		writer=csv.writer(f3)
+		writer.writerows(class3)
+
 
 def main():
 	num_trials = 1
+	runDataTest = False
 	filename1 = "./Data/G1_singlecells_counts.txt"
 	filename2 = "./Data/G2M_singlecells_counts.txt"
 	filename3 = "./Data/S_singlecells_counts.txt"
@@ -81,8 +120,13 @@ def main():
 	test_data=loadTestData(testname)
 	test_data_labels=loadTestLabels(testlabelname)
 
-	
+	trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels =sortData(data1,data2,data3,protein_labels,test_data,test_data_labels)
 
+	if(runDataTest ==True):
+		data1=trimmed_data1
+		data2=trimmed_data2
+		data3=trimmed_data3
+		protein_labels=trimmed_labels
 
 
 	for trial in range(0,num_trials):
@@ -124,15 +168,21 @@ def main():
 		predict1 = clf.predict(test_data1)
 		predict2 = clf.predict(test_data2)
 		predict3 = clf.predict(test_data3)
+		if runDataTest==True:
+			predict_data=clf.predict(test_data)
+			saveData(predict_data)
 
 		errors += (np.count_nonzero(predict1-1)+np.count_nonzero(predict2-2)+np.count_nonzero(predict3-3))
 
 		train_labels = []
 		test_labels = []
+		if runDataTest == True:
+			with open('test statistics.txt', 'w') as st:
+				st.write('Average Errors after'+ str(num_trials) + ' trials: \n')
+				st.write(errors/num_trials + '\n')
+				st.write('% Errors: '+(errors/(num_trials*test_size))+'\n')
+				st.close()
 
-		# print (clf.predict(test_data1))
-		# print (clf.predict(test_data2))
-		# print (clf.predict(test_data3))
 	print('Average Errors after ' + str(num_trials) + ' trials:')
 	print(errors/num_trials)
 	print('% Errors: ')
