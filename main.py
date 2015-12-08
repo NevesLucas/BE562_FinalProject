@@ -242,6 +242,7 @@ def main():
 		predict3 = clf.predict(test_data3)
 		if runDataTest==True:
 			print(str(len(test_data)))
+			test_data=test_data.transpose()
 			predict_data=clf.predict(test_data)
 			saveData(predict_data,trial)
 
