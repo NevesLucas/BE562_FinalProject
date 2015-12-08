@@ -4,3 +4,17 @@ Read Test Data -complete
 Sort Test Data -pending
 Remove Data that is not common between the test and training data
 Create file output, one file per class, containing classified data
+
+
+AZURE LOGIN:
+intel Xeon E5 2.2GHz (single core)
+
+ssh: compbiocompute.cloudapp.net
+port# 22
+
+username: lucas
+password: proteins
+
+usage: to run python 3.5, use:  ~/anaconda3/bin/python <filename.py>
+
+git repo is set up, can push/pull use directory BE562_FinalProject

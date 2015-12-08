@@ -207,7 +207,7 @@ def main():
 		with open('test statistics.txt', 'w') as st:
 			st.write('Average Errors after'+ str(num_trials) + ' trials: \n')
 			st.write(str(errors/num_trials) + '\n')
-			st.write('% Errors: '+(errors/(num_trials*test_size))+'\n')
+			st.write('% Errors: '+str(errors/(num_trials*test_size))+'\n')
 			st.close()
 
 	print('Average Errors after ' + str(num_trials) + ' trials:')
