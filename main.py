@@ -119,56 +119,10 @@ def saveData(data,test):
 	class2=np.transpose(class2)
 	class3=np.transpose(class3)
 
-	with open('test_results_trial_'+str(trial)+'_class1.csv','w') as f1:
-		writer=csv.writer(f1,dialect='excel')
-		writer.writerows(class1)
-	with open('test_results_trial_'+str(trial)+'class2.csv','w') as f2: 
-		writer=csv.writer(f2,dialect='excel')
-		writer.writerows(class2)
-	with open('test_results_trial_'+str(trial)+'class3.csv','w') as f3:
-		writer=csv.writer(f3,dialect='excel')
-		writer.writerows(class3)
+	np.savetxt('test_results_trial_class1.csv', class1, delimiter="\t")
+	np.savetxt('test_results_trial_class2.csv', class2, delimiter="\t")
+	np.savetxt('test_results_trial_class3.csv', class3, delimiter="\t")
 
-def runtimeSaver(trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data): #broken
-	print(trimmed_data1)
-	with open('trimmed_labels.csv','w') as f3:
-		writer=csv.writer(f3,dialect='excel')
-		writer.writerows(trimmed_labels)
-	with open('trimmed_data1.csv','w') as f1:
-		writer=csv.writer(f1)
-		writer.writerows(trimmed_data1)
-	with open('trimmed_data2.csv','w') as f2: 
-		writer=csv.writer(f2)
-		writer.writerows(trimmed_data2)
-	with open('trimmed_data3.csv','w') as f3:
-		writer=csv.writer(f3)
-		writer.writerows(trimmed_data3)
-
-	with open('test_data.csv','w') as f3:
-		writer=csv.writer(f3)
-		writer.writerows(test_data)
- 
-def runtimeload():  #broken
-	with open('trimmed_data1.csv','r') as f1:
-		data_iter = csv.reader(f1,delimiter=',')
-		data=[ data for data in data_iter ]
-	trimmed_data1 =  np.asarray(data)
-	with open('trimmed_data2.csv','r') as f2:
-		data_iter = csv.reader(f2,delimiter=',')
-		data=[ data for data in data_iter ]
-	trimmed_data2 =  np.asarray(data)
-	with open('trimmed_data3.csv','r') as f3:
-		data_iter = csv.reader(f3,delimiter=',')
-		data=[ data for data in data_iter ]
-	trimmed_data3 =  np.asarray(data)
-	with open('test_data.csv','r') as f4:
-		data_iter = csv.reader(f4,delimiter=',')
-		data=[ data for data in data_iter ]
-	test_data=  np.asarray(data)
-	with open('trimmed_labels.csv','r') as f5:
-	    reader = csv.reader(f5,delimiter=',')
-	    trimmed_labels = list(reader)
-	return [trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data]
 
 def main():
 	num_trials = 1
@@ -192,15 +146,10 @@ def main():
 		test_data=loadTestData(testname)
 		test_data_labels=loadTestLabels(testlabelname)
 
-		if NEWDATA:
-			[trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data] =sortData(data1,data2,data3,protein_labels,test_data_labels,test_data)
-	
-			#runtimeSaver(trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data)
-	
-		else:
-			[trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data] = runtimeload()
+		[trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data] =sortData(data1,data2,data3,protein_labels,test_data_labels,test_data)
 
 		print(str(len(trimmed_data1)))
+
 		data1=trimmed_data1
 		data2=trimmed_data2
 		data3=trimmed_data3
