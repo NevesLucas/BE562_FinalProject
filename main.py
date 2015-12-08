@@ -70,29 +70,35 @@ def sortData(data1,data2,data3,protein_labels,test_data_Labels,test_data): #extr
 	data_out_labels=[]
 
 	todel=[]
-	for i in range(0,len(test_data_Labels)): 
+	init=True
+	for i in range(len(test_data_Labels)): 
 		isfound=True
 		try:
 			matchlist = protein_labels.index(test_data_Labels[i])
-
 		except ValueError:
 			isfound=False
+
 		if isfound==True:
 			data_out_labels.append(protein_labels[matchlist])
 
-			if i==0:
-				data_out1= np.append(data_out1,data1[matchlist],axis=0)
-				data_out2=np.append(data_out2,data2[matchlist],axis=0)
-				data_out3=np.append(data_out3,data3[matchlist],axis=0)
+			if init==True:
+				data_out1=data1[matchlist]
+				data_out2=data2[matchlist]
+				data_out3=data3[matchlist]
+				out_data=test_data[i]
+				init=False
 			else:
-				data_out1= np.vstack((data_out1,data1[matchlist]))
+				data_out1=np.vstack((data_out1,data1[matchlist]))
 				data_out2=np.vstack((data_out2,data2[matchlist]))
-				data_out3=np.vstack((data_out3,data3[matchlist]))				
+				data_out3=np.vstack((data_out3,data3[matchlist]))
+				out_data=np.vstack((out_data,test_data[i]))				
 
 		if isfound==False:
-			todel=np.append(todel,i)
-	test_data=np.delete(test_data,todel,0)
-	return [data_out1,data_out2,data_out3,data_out_labels,test_data]
+			isfound=True
+
+	print(len(out_data))
+	print(len(data_out1))
+	return [data_out1,data_out2,data_out3,data_out_labels,out_data]
 
 def saveData(data,test):
 	class1=[]
@@ -104,11 +110,11 @@ def saveData(data,test):
 
 	for i in range(0,len(data)):
 		if data[i]==1:
-			class1.append(test[:,i])
+			class1=np.append(class1,test[i,:])
 		elif data[i]==2:
-			class2.append(test[:,i])
+			class2=np.append(class2,test[i,:])
 		elif data[i]==3:
-			class3.append(test[:,i])
+			class3=np.append(class3,test[i,:])
 	class1=np.transpose(class1)
 	class2=np.transpose(class2)
 	class3=np.transpose(class3)
@@ -244,7 +250,7 @@ def main():
 			print(str(len(test_data)))
 			test_data=test_data.transpose()
 			predict_data=clf.predict(test_data)
-			saveData(predict_data,trial)
+			saveData(predict_data,test_data)
 
 		errors += (np.count_nonzero(predict1-1)+np.count_nonzero(predict2-2)+np.count_nonzero(predict3-3))
 
