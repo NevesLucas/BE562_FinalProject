@@ -44,12 +44,16 @@ def importProteinLabels(filename):
 	return labels
 
 def TrainSVM(data,labels):
-	passive = True
-	if passive:
+	usealgo = 1
+	if usealgo == 0:
 		from sklearn.linear_model import PassiveAggressiveClassifier
-		clf=PassiveAggressiveClassifier(random_state=np.random.randint(1000),n_iter=5)
-	else:
-		clf = SVC(probability= True,decision_function_shape='ovr',random_state=np.random.randint(10000),kernel="linear")
+		clf=PassiveAggressiveClassifier(random_state=np.random.randint(1000),loss='hinge',n_iter=5,n_jobs=6)
+	elif usealgo ==1:
+		clf = SVC(probability= True,decision_function_shape='ovr',random_state=np.random.randint(10000), kernel='linear')
+
+	elif usealgo ==2:
+		from sklearn.svm import LinearSVC
+		clf = LinearSVC()
 	clf.fit(data,labels)
 	return clf
 
@@ -128,9 +132,8 @@ def saveData(data,test,trial):
 	np.savetxt('test_results_trial'+str(trial)+'_class2.csv', class2, delimiter="\t")
 	np.savetxt('test_results_trial'+str(trial)+'_class3.csv', class3, delimiter="\t")
 
-
 def main():
-	num_trials = 3
+	num_trials = 10
 	runDataTest = True
 	filename1 = "./Data/G1_singlecells_counts.txt"
 	filename2 = "./Data/G2M_singlecells_counts.txt"
