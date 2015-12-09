@@ -47,7 +47,7 @@ def TrainSVM(data,labels):
 	passive = True
 	if passive:
 		from sklearn.linear_model import PassiveAggressiveClassifier
-		clf=PassiveAgressiveClassifier(random_state=np.random.randint(1000),n_iter=5)
+		clf=PassiveAggressiveClassifier(random_state=np.random.randint(1000),n_iter=5)
 	else:
 		clf = SVC(probability= True,decision_function_shape='ovr',random_state=np.random.randint(10000),kernel="linear")
 	clf.fit(data,labels)
