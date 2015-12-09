@@ -198,9 +198,9 @@ def main():
 		predict3 = clf.predict(test_data3)
 		if runDataTest==True:
 			print(str(len(test_data)))
-			test_data=test_data.transpose()
-			predict_data=clf.predict(test_data)
-			saveData(predict_data,test_data,trial)
+			test_data1=test_data.transpose()
+			predict_data=clf.predict(test_data1)
+			saveData(predict_data,test_data1,trial)
 
 		errors += (np.count_nonzero(predict1-1)+np.count_nonzero(predict2-2)+np.count_nonzero(predict3-3))
 
