@@ -130,7 +130,7 @@ def saveData(data,test,trial):
 
 
 def main():
-	num_trials = 4
+	num_trials = 3
 	runDataTest = True
 	filename1 = "./Data/G1_singlecells_counts.txt"
 	filename2 = "./Data/G2M_singlecells_counts.txt"
