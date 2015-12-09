@@ -11,7 +11,7 @@ import time
 start_time = time.time()
 
 num_rows = 38294
-test_size = 12	#Change this to change how big the test sample size is
+test_size = 10	#Change this to change how big the test sample size is
 NEWDATA=True # if making tweaks that dont alter file I/o, can flag this false to speed up runtime 
 def importData(filename):
 	with open(filename) as f:
@@ -110,20 +110,27 @@ def sortData(data1,data2,data3,protein_labels,test_data_Labels,test_data): #extr
 	return [data_out1,data_out2,data_out3,data_out_labels,out_data]
 
 def saveData(data,test,trial):
-	class1=[]
-	class1=np.array(class1)
-	class2=[]
-	class2=np.array(class2)
-	class3=[]
-	class3=np.array(class3)
+	class1=np.array([])
+	class2=np.array([])
+	class3=np.array([]])
 
 	for i in range(0,len(data)):
 		if data[i]==1:
-			class1=np.append(class1,test[i,:])
+			if class1.size < 1:
+				class1=np.append(class1,test[i,:])
+			else:
+				class1=np.vstack(class1,test[i,:])
 		elif data[i]==2:
-			class2=np.append(class2,test[i,:])
+			if class1.size < 1:
+				class2=np.append(class2,test[i,:])
+			else:
+				class2=np.vstack(class2,test[i,:])
 		elif data[i]==3:
-			class3=np.append(class3,test[i,:])
+			if class1.size < 1:
+				class3=np.append(class3,test[i,:])
+			else:
+				class3=np.vstack(class3,test[i,:])
+
 	class1=np.transpose(class1)
 	class2=np.transpose(class2)
 	class3=np.transpose(class3)
