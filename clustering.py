@@ -4,6 +4,7 @@ import numpy as np
 import sklearn.cluster as c
 import csv
 import time
+import matplotlib.pyplot as plt
 start_time = time.time()
 
 def importData(filename):
@@ -19,20 +20,24 @@ def importText(filename):
 def getInd(user_labels,labels):
     ind = []
     for l in user_labels:
-        ind.append(labels.index(l))
+        try:
+            val=labels.index(l)
+        except:
+            "skip this"
+        ind.append(val)
     return ind
 
 
 def main():
-    labels = importText('data_labels.txt')
+    labels = importText('Data/sampleDataLabels.txt')
     user_labels = importText('user_labels.txt')
     ind = getInd(user_labels,labels)
-
     test_data = np.genfromtxt('./Data/sampleData.csv')
-
     test_data = test_data[ind,:]
 
-    kmeans =  c.KMeans(n_clusters=len(ind))
+    kmeans =  c.KMeans(n_clusters=5,random_state=170,n_jobs=1,init='k-means++').fit_predict(test_data)
+    np.savetxt('cluster_out.txt',kmeans,delimiter="\t")
+
 
 
 main()
