@@ -1,11 +1,3 @@
-Plekhg3
-Plekhg1
-Plekhg6
-4930564K09Rik
-Plekhg5
-Nsa2
-Nampt
-Vmo1
 BMP-4
 FGF-8
 FoxJ3
@@ -93,3 +85,7 @@ twist1
 twist2
 Wnt3a
 Wnt8a
+OSR1
+WT1
+WNT3
+TBX6

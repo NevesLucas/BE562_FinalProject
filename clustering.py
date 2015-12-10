@@ -23,8 +23,11 @@ def getInd(user_labels,labels):
         try:
             val=labels.index(l)
         except:
-            "skip this"
-        ind.append(val)
+            norun=True
+        if norun==True:
+            norun=False
+        else:
+            ind.append(val)
     return ind
 
 
