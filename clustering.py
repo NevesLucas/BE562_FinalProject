@@ -19,6 +19,7 @@ def importText(filename):
 
 def getInd(user_labels,labels):
     ind = []
+    norun=False
     for l in user_labels:
         try:
             val=labels.index(l)
@@ -33,13 +34,18 @@ def getInd(user_labels,labels):
 
 def main():
     labels = importText('Data/sampleDataLabels.txt')
+    for i in range(len(labels)):
+        labels[i]=labels[i].lower()
     user_labels = importText('user_labels.txt')
+    for i in range(len(user_labels)):
+        user_labels[i]=labels[i].lower()
     ind = getInd(user_labels,labels)
     test_data = np.genfromtxt('./Data/sampleData.csv')
     test_data = test_data[ind,:]
 
-    kmeans =  c.KMeans(n_clusters=5,random_state=170,n_jobs=1,init='k-means++').fit_predict(test_data)
+    kmeans =  c.KMeans(n_clusters=5,random_state=11000,n_jobs=1,init='k-means++').fit_predict(test_data)
     np.savetxt('cluster_out.txt',kmeans,delimiter="\t")
+    print(kmeans)
 
 
 
