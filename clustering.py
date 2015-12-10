@@ -38,12 +38,15 @@ def main():
         labels[i]=labels[i].lower()
     user_labels = importText('user_labels.txt')
     for i in range(len(user_labels)):
-        user_labels[i]=labels[i].lower()
+        user_labels[i]=user_labels[i].lower()
     ind = getInd(user_labels,labels)
     test_data = np.genfromtxt('./Data/sampleData.csv')
     test_data = test_data[ind,:]
+    print(ind)
 
-    kmeans =  c.KMeans(n_clusters=5,random_state=11000,n_jobs=1,init='k-means++').fit_predict(test_data)
+    test_data=test_data.transpose()
+
+    kmeans =  c.KMeans(n_clusters=5,random_state=180,n_jobs=1,init='k-means++').fit_predict(test_data)
     np.savetxt('cluster_out.txt',kmeans,delimiter="\t")
     print(kmeans)
 
