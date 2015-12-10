@@ -45,11 +45,14 @@ def importProteinLabels(filename):
 	return labels
 
 def TrainSVM(data,labels):
+<<<<<<< HEAD
 	usealgo = 1
+
 	if usealgo == 0:
 		from sklearn.linear_model import PassiveAggressiveClassifier
 		clf=PassiveAggressiveClassifier(class_weight='balanced',n_jobs=-1,n_iter=15,fit_intercept=True)
 	elif usealgo ==1:
+<<<<<<< HEAD
 		clf = SVC(probability= True,decision_function_shape='ovr',random_state=np.random.randint(1000),kernel="linear")
 
 	elif usealgo ==2:
@@ -158,6 +161,7 @@ def saveData(data,test,trial):
 	class2=np.transpose(class2)
 	class3=np.transpose(class3)
 
+<<<<<<< HEAD
 	np.savetxt('Results/test_results_trial'+str(trial)+'_class1.csv', class1, delimiter="\t")
 	np.savetxt('Results/test_results_trial'+str(trial)+'_class2.csv', class2, delimiter="\t")
 	np.savetxt('Results/test_results_trial'+str(trial)+'_class3.csv', class3, delimiter="\t")
@@ -179,13 +183,12 @@ def main():
 	data1, ncols1 = importData(filename1)
 	data2, ncols2 = importData(filename2)
 	data3, ncols3 = importData(filename3)
+<<<<<<< HEAD
 	test_data_norm=loadTestData(testname)
 	test_data_labels_norm=loadTestLabels(testlabelname)
 
 	if(runDataTest ==True):
 		if NEWDATA:
-			test_data_norm=loadTestData(testname)
-			test_data_labels_norm=loadTestLabels(testlabelname)
 			[trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data] =sortData(data1,data2,data3,protein_labels,test_data_labels_norm,test_data_norm)
 			quicksave(trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data)
 		else:
@@ -246,6 +249,7 @@ def main():
 			test_data1=test_data.transpose()
 			predict_data=clf.predict(test_data1)
 			if record ==True:
+<<<<<<< HEAD
 
 				saveData(predict_data,test_data_norm.transpose(),trial)
 		current_error= (np.count_nonzero(predict1-1)+np.count_nonzero(predict2-2)+np.count_nonzero(predict3-3))
@@ -261,6 +265,7 @@ def main():
 	minerror=error_array.min()
 	if runDataTest == True:
 		with open('test statistics.txt', 'w') as st:
+<<<<<<< HEAD
 			st.write('Average Errors after '+ str(num_trials) + ' trials: ')
 			st.write(str(errors/(num_trials)) + '\n')
 			st.write('Variance: '+str(variance)+'\n') 
