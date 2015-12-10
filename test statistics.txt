@@ -1,3 +1,4 @@
-Average Errors after10 trials: 
-4.5
-% Errors: 0.375
+Average Errors after 10 trials: 4.1
+Variance: 4.09
+best trial was trial (array([8]),)with error count of: 1
+% Errors: 13.666666666666666

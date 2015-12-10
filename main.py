@@ -11,8 +11,9 @@ import time
 start_time = time.time()
 
 num_rows = 38294
-test_size = 12	#Change this to change how big the test sample size is
+test_size = 10	#Change this to change how big the test sample size is
 NEWDATA=False # if making tweaks that dont alter file I/o, can flag this false to speed up runtime 
+record=True  #enable to save results to file
 def importData(filename):
 	with open(filename) as f:
 		ncols = len(f.readline().split('\t')) #gets number of columns
@@ -49,7 +50,7 @@ def TrainSVM(data,labels):
 		from sklearn.linear_model import PassiveAggressiveClassifier
 		clf=PassiveAggressiveClassifier(class_weight='balanced',n_jobs=-1,n_iter=15,fit_intercept=True)
 	elif usealgo ==1:
-		clf = SVC(decision_function_shape='ovr', kernel='linear')
+		clf = SVC(probability= True,decision_function_shape='ovr',random_state=np.random.randint(1000),kernel="linear")
 
 	elif usealgo ==2:
 		from sklearn.svm import LinearSVC
@@ -123,9 +124,9 @@ def quickload():
 def quicksave(data1,data2,data3,data_labels,data):	
 		
 		np.savetxt('data1.txt',data1,delimiter="\t")
-		np.savetxt('data2.txt',data1,delimiter="\t")
-		np.savetxt('data3.txt',data1,delimiter="\t")
-		np.savetxt('data__test.txt',data1,delimiter="\t")
+		np.savetxt('data2.txt',data2,delimiter="\t")
+		np.savetxt('data3.txt',data3,delimiter="\t")
+		np.savetxt('data__test.txt',data,delimiter="\t")
 		with open('data_labels.txt','w') as f:
 			for labels in data_labels:
 				f.write(labels+ '\n')
@@ -157,12 +158,12 @@ def saveData(data,test,trial):
 	class2=np.transpose(class2)
 	class3=np.transpose(class3)
 
-	np.savetxt('test_results_trial'+str(trial)+'_class1.csv', class1, delimiter="\t")
-	np.savetxt('test_results_trial'+str(trial)+'_class2.csv', class2, delimiter="\t")
-	np.savetxt('test_results_trial'+str(trial)+'_class3.csv', class3, delimiter="\t")
+	np.savetxt('Results/test_results_trial'+str(trial)+'_class1.csv', class1, delimiter="\t")
+	np.savetxt('Results/test_results_trial'+str(trial)+'_class2.csv', class2, delimiter="\t")
+	np.savetxt('Results/test_results_trial'+str(trial)+'_class3.csv', class3, delimiter="\t")
 
 def main():
-	num_trials = 3
+	num_trials = 10
 	runDataTest = True
 	filename1 = "./Data/G1_singlecells_counts.txt"
 	filename2 = "./Data/G2M_singlecells_counts.txt"
@@ -172,19 +173,20 @@ def main():
 	train_labels = []
 	test_labels = []
 	errors = 0
+	error_array=[]
 
 	protein_labels = importProteinLabels(filename1)
 	data1, ncols1 = importData(filename1)
 	data2, ncols2 = importData(filename2)
 	data3, ncols3 = importData(filename3)
-
+	test_data_norm=loadTestData(testname)
+	test_data_labels_norm=loadTestLabels(testlabelname)
 
 	if(runDataTest ==True):
 		if NEWDATA:
-			test_data=loadTestData(testname)
-			test_data_labels=loadTestLabels(testlabelname)
-
-			[trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data] =sortData(data1,data2,data3,protein_labels,test_data_labels,test_data)
+			test_data_norm=loadTestData(testname)
+			test_data_labels_norm=loadTestLabels(testlabelname)
+			[trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data] =sortData(data1,data2,data3,protein_labels,test_data_labels_norm,test_data_norm)
 			quicksave(trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data)
 		else:
 			[trimmed_data1,trimmed_data2,trimmed_data3,trimmed_labels,test_data] =quickload()
@@ -243,21 +245,35 @@ def main():
 			print(str(len(test_data)))
 			test_data1=test_data.transpose()
 			predict_data=clf.predict(test_data1)
-			saveData(predict_data,test_data1,trial)
+			if record ==True:
 
-		errors += (np.count_nonzero(predict1-1)+np.count_nonzero(predict2-2)+np.count_nonzero(predict3-3))
+				saveData(predict_data,test_data_norm.transpose(),trial)
+		current_error= (np.count_nonzero(predict1-1)+np.count_nonzero(predict2-2)+np.count_nonzero(predict3-3))
+		errors += current_error
+		error_array.append(current_error)
+		
+		print(predict1)
+		print(predict2)
+		print(predict3)
 
+	error_array=np.array(error_array)
+	variance=np.var(error_array)
+	minerror=error_array.min()
 	if runDataTest == True:
 		with open('test statistics.txt', 'w') as st:
-			st.write('Average Errors after'+ str(num_trials) + ' trials: \n')
-			st.write(str(errors/num_trials) + '\n')
-			st.write('% Errors: '+str(errors/(num_trials*test_size))+'\n')
+			st.write('Average Errors after '+ str(num_trials) + ' trials: ')
+			st.write(str(errors/(num_trials)) + '\n')
+			st.write('Variance: '+str(variance)+'\n') 
+			st.write('best trial was trial ' +str(np.where(error_array == minerror))+'with error count of: '+str(minerror)+'\n')
+			st.write('% Errors: '+str(errors/(num_trials*test_size*3)*100)+'\n')
 			st.close()
 
 	print('Average Errors after ' + str(num_trials) + ' trials:')
 	print(errors/num_trials)
+	print('variance: '+str(variance))
+	print('min error in trial '+str(np.where(error_array == minerror))+'count: '+str(minerror))
 	print('% Errors: ')
-	print((errors/(num_trials*test_size))*100)
+	print((errors/(num_trials*test_size*3))*100)
 
 
 main()
